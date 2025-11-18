@@ -54,43 +54,6 @@
       transform: scale(1.1) rotate(-2deg);
       box-shadow: 0 0 18px #ffd700;
     }
-
-
-    /* MODAL CONTRASENYA */
-    #password-modal {
-      display:none;
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background:rgba(0,0,0,0.7);
-      backdrop-filter:blur(4px);
-      justify-content:center;
-      align-items:center;
-      z-index: 999;
-    }
-
-    #password-box {
-      background:#2a1a5c;
-      padding:30px;
-      border-radius:12px;
-      width:300px;
-      text-align:center;
-      border:2px solid #f5e6c8;
-      box-shadow:0 0 20px #000;
-    }
-
-    #password-box input {
-      width:90%;
-      padding:8px;
-      font-size:16px;
-      margin-top:10px;
-    }
-
-    #password-box button {
-      margin-top:15px;
-      padding:8px 16px;
-      font-size:18px;
-    }
   </style>
 </head>
 
@@ -136,15 +99,6 @@
     <button onclick="updateScore('equip2', -70)">-70</button>
   </div>
 
-  <!-- MODAL CONTRASENYA -->
-  <div id="password-modal">
-    <div id="password-box">
-      <h3>Contrasenya d'Admin</h3>
-      <input id="modal-pass" type="password" placeholder="Introdueix la contrasenya">
-      <button onclick="confirmPassword()">Validar</button>
-    </div>
-  </div>
-
   <!-- Firebase + JS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
@@ -164,33 +118,23 @@
     const db = getDatabase(app);
 
     let adminKey = null;
-    let pendingAction = null;
 
-    // Assegurar que el modal està amagat quan carreguem
-    window.addEventListener("load", () => {
-      document.getElementById("password-modal").style.display = "none";
-    });
+    // Funció que demana contrasenya només la primera vegada
+    function ensurePassword() {
+      if (adminKey) return true;
 
-    function requestPassword(action) {
-      pendingAction = action;
-      document.getElementById("password-modal").style.display = "flex";
+      const pwd = prompt("Introdueix la contrasenya d'edició:");
+
+      if (!pwd) return false;
+
+      adminKey = pwd.trim();
+      return true;
     }
-
-    window.confirmPassword = function () {
-      adminKey = document.getElementById("modal-pass").value.trim();
-      document.getElementById("password-modal").style.display = "none";
-
-      if (pendingAction) {
-        pendingAction();
-        pendingAction = null;
-      }
-    };
 
     window.updateScore = async function (team, delta) {
 
-      if (!adminKey) {
-        return requestPassword(() => updateScore(team, delta));
-      }
+      // Demanar contrasenya només la primera vegada
+      if (!ensurePassword()) return;
 
       try {
         const scoreRef = ref(db, 'scores/' + team);
@@ -208,6 +152,7 @@
       }
     };
 
+    // Actualització visual en temps real
     onValue(ref(db, 'scores/equip1'), snap => {
       if (snap.exists()) document.getElementById('score-equip1').textContent = snap.val().points;
     });
