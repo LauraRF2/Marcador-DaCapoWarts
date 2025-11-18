@@ -12,7 +12,7 @@
       color: #f5e6c8;
       text-align: center;
       min-height: 100vh;
-      background-image: url('Fons.png'); 
+      background-image: url('Fons.png');
       background-size: cover;
       padding: 80px;
     }
@@ -60,7 +60,6 @@
 <body>
   <h1>Marcador DaCapoWarts</h1>
 
-  <!-- PUNTUACIONS -->
   <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
   <div>
     <button onclick="updateScore('equip1', 5)">+5</button>
@@ -100,14 +99,11 @@
   </div>
 
 
-
-
-  <!-- NO MODAL, NO INPUTS — NOMÉS JS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
     import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
 
-    const firebaseConfig = {
+    const app = initializeApp({
       apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
       authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
       databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
@@ -115,54 +111,43 @@
       storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
       messagingSenderId: "613762687721",
       appId: "1:613762687721:web:e3582bdc41f7befec8c678"
-    };
+    });
 
-    const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let adminKey = null; // Es guardarà després del primer prompt
+    let key = null;
 
-    // FUNCIO PER DEMANAR CONTRASENYA NOMÉS LA PRIMERA VEGADA
-    function ensurePassword() {
-      if (adminKey) return true;
+    function ensureKey() {
+      if (key) return true;
 
-      const pwd = prompt("Introdueix la contrasenya per editar punts:");
+      const entered = prompt("Clau d'accés:");
 
-      if (!pwd || pwd.trim() === "") return false;
+      if (!entered) return false;
 
-      adminKey = pwd.trim();
+      key = entered.trim();
       return true;
     }
 
     window.updateScore = async function (team, delta) {
+      if (!ensureKey()) return;
 
-      if (!ensurePassword()) return;
+      const scoreRef = ref(db, "scores/" + team);
+      const snapshot = await get(scoreRef);
+      const current = snapshot.exists() ? snapshot.val().points : 0;
 
-      try {
-        const scoreRef = ref(db, 'scores/' + team);
-        const snapshot = await get(scoreRef);
-        const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
-        const newPoints = currentPoints + delta;
-
-        await set(scoreRef, {
-          points: newPoints,
-          secret: adminKey
-        });
-
-      } catch (err) {
-        console.error("ERROR:", err);
-      }
+      await set(scoreRef, {
+        points: current + delta,
+        secret: key
+      });
     };
 
-    // Actualització visual en temps real
-    onValue(ref(db, 'scores/equip1'), snap => {
-      if (snap.exists()) document.getElementById('score-equip1').textContent = snap.val().points;
+    onValue(ref(db, "scores/equip1"), snap => {
+      if (snap.exists()) document.getElementById("score-equip1").textContent = snap.val().points;
     });
 
-    onValue(ref(db, 'scores/equip2'), snap => {
-      if (snap.exists()) document.getElementById('score-equip2').textContent = snap.val().points;
+    onValue(ref(db, "scores/equip2"), snap => {
+      if (snap.exists()) document.getElementById("score-equip2").textContent = snap.val().points;
     });
-
   </script>
 
 </body>
