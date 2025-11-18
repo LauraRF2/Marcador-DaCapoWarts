@@ -99,7 +99,10 @@
     <button onclick="updateScore('equip2', -70)">-70</button>
   </div>
 
-  <!-- Firebase + JS -->
+
+
+
+  <!-- NO MODAL, NO INPUTS — NOMÉS JS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
     import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
@@ -117,15 +120,15 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let adminKey = null;
+    let adminKey = null; // Es guardarà després del primer prompt
 
-    // Funció que demana contrasenya només la primera vegada
+    // FUNCIO PER DEMANAR CONTRASENYA NOMÉS LA PRIMERA VEGADA
     function ensurePassword() {
       if (adminKey) return true;
 
-      const pwd = prompt("Introdueix la contrasenya d'edició:");
+      const pwd = prompt("Introdueix la contrasenya per editar punts:");
 
-      if (!pwd) return false;
+      if (!pwd || pwd.trim() === "") return false;
 
       adminKey = pwd.trim();
       return true;
@@ -133,7 +136,6 @@
 
     window.updateScore = async function (team, delta) {
 
-      // Demanar contrasenya només la primera vegada
       if (!ensurePassword()) return;
 
       try {
@@ -148,7 +150,7 @@
         });
 
       } catch (err) {
-        console.error("Error:", err);
+        console.error("ERROR:", err);
       }
     };
 
@@ -160,11 +162,8 @@
     onValue(ref(db, 'scores/equip2'), snap => {
       if (snap.exists()) document.getElementById('score-equip2').textContent = snap.val().points;
     });
+
   </script>
 
 </body>
 </html>
-
-
-   
-
