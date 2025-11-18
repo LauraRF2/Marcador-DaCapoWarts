@@ -17,21 +17,13 @@
       padding: 80px;
     }
 
-    h1 {
-      font-family: 'Cinzel', serif;
+    h1, h2 {
       text-shadow: 2px 2px 8px #000;
-      font-size: 3.5em;
-      margin-bottom: 60px;
     }
-    
-    h2 {
-      font-family: 'Cinzel', serif;
-      text-shadow: 2px 2px 8px #000;
-      font-size: 2.5em;
-      margin-top: 45px;
-      margin-bottom: 20px;
-    }
-    
+
+    h1 { font-size: 3.5em; margin-bottom: 60px; }
+    h2 { font-size: 2.5em; margin-top: 45px; margin-bottom: 20px; }
+
     span {
       font-size: 2.2em;
       font-weight: bold;
@@ -49,10 +41,45 @@
       transition: all 0.3s ease;
       box-shadow: 0 0 12px #6a1fa5;
     }
-
     button:hover {
       transform: scale(1.1) rotate(-2deg);
       box-shadow: 0 0 18px #ffd700;
+    }
+
+    /* POPUP INICIAL */
+    #password-popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #popup-box {
+      background: #1c1238;
+      padding: 30px;
+      border: 3px solid #f5e6c8;
+      border-radius: 18px;
+      box-shadow: 0 0 20px #ffd700;
+      text-align: center;
+    }
+
+    #popup-box input {
+      font-size: 24px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      width: 80%;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    #popup-box button {
+      font-size: 24px;
+      padding: 10px 25px;
     }
   </style>
 </head>
@@ -79,7 +106,7 @@
     <button onclick="updateScore('equip1', -70)">-70</button>
   </div>
 
-  <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
+  <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</span></h2>
   <div>
     <button onclick="updateScore('equip2', 5)">+5</button>
     <button onclick="updateScore('equip2', 10)">+10</button>
@@ -98,6 +125,15 @@
     <button onclick="updateScore('equip2', -70)">-70</button>
   </div>
 
+  <!-- POPUP OCULT -->
+  <div id="password-popup">
+    <div id="popup-box">
+      <h2>Introdueix la contrasenya</h2>
+      <input type="password" id="passwordInput">
+      <br>
+      <button onclick="validatePassword()">Validar</button>
+    </div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
@@ -116,20 +152,27 @@
     const db = getDatabase(app);
 
     let key = null;
+    let pendingAction = null;
 
-    function ensureKey() {
-      if (key) return true;
-
-      const entered = prompt("Clau d'accés:");
-
-      if (!entered) return false;
-
-      key = entered.trim();
-      return true;
+    function requestPassword(action) {
+      pendingAction = action;
+      document.getElementById("password-popup").style.display = "flex";
     }
 
+    window.validatePassword = function () {
+      key = document.getElementById("passwordInput").value.trim();
+      document.getElementById("password-popup").style.display = "none";
+
+      if (pendingAction) {
+        pendingAction();
+        pendingAction = null;
+      }
+    };
+
     window.updateScore = async function (team, delta) {
-      if (!ensureKey()) return;
+      if (!key) {
+        return requestPassword(() => updateScore(team, delta));
+      }
 
       const scoreRef = ref(db, "scores/" + team);
       const snapshot = await get(scoreRef);
@@ -152,3 +195,4 @@
 
 </body>
 </html>
+
