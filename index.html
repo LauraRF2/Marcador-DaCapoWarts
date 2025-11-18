@@ -17,17 +17,9 @@
       padding: 80px;
     }
 
-    h1, h2 {
-      text-shadow: 2px 2px 8px #000;
-    }
-
     h1 { font-size: 3.5em; margin-bottom: 60px; }
-    h2 { font-size: 2.5em; margin-top: 45px; margin-bottom: 20px; }
-
-    span {
-      font-size: 2.2em;
-      font-weight: bold;
-    }
+    h2 { font-size: 2.5em; margin: 45px 0 20px; }
+    span { font-size: 2.2em; font-weight: bold; }
 
     button {
       margin: 10px;
@@ -41,52 +33,56 @@
       transition: all 0.3s ease;
       box-shadow: 0 0 12px #6a1fa5;
     }
+
     button:hover {
       transform: scale(1.1) rotate(-2deg);
       box-shadow: 0 0 18px #ffd700;
     }
 
-    /* POPUP INICIAL */
-    #password-popup {
+    /* MODAL */
+    #modal-bg {
+      display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      display: none;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
       justify-content: center;
       align-items: center;
       z-index: 9999;
     }
 
-    #popup-box {
-      background: #1c1238;
+    #modal-box {
+      background: #2a1a5c;
       padding: 30px;
-      border: 3px solid #f5e6c8;
-      border-radius: 18px;
-      box-shadow: 0 0 20px #ffd700;
+      border-radius: 12px;
+      width: 320px;
+      border: 2px solid #f5e6c8;
       text-align: center;
     }
 
-    #popup-box input {
-      font-size: 24px;
+    #passwordInput {
+      width: 90%;
+      font-size: 20px;
       padding: 10px;
-      border-radius: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
       border: none;
-      width: 80%;
-      margin-bottom: 20px;
-      text-align: center;
-    }
 
-    #popup-box button {
-      font-size: 24px;
-      padding: 10px 25px;
+      /* Simula un password sense activar autofill */
+      -webkit-text-security: disc;
+      text-security: disc;
+      autocomplete: off;
+      inputmode: none;
     }
   </style>
 </head>
 
 <body>
+
   <h1>Marcador DaCapoWarts</h1>
 
+  <!-- EQUIP 1 -->
   <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
   <div>
     <button onclick="updateScore('equip1', 5)">+5</button>
@@ -106,7 +102,8 @@
     <button onclick="updateScore('equip1', -70)">-70</button>
   </div>
 
-  <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</span></h2>
+  <!-- EQUIP 2 -->
+  <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
   <div>
     <button onclick="updateScore('equip2', 5)">+5</button>
     <button onclick="updateScore('equip2', 10)">+10</button>
@@ -125,15 +122,17 @@
     <button onclick="updateScore('equip2', -70)">-70</button>
   </div>
 
-  <!-- POPUP OCULT -->
-  <div id="password-popup">
-    <div id="popup-box">
-      <h2>Introdueix la contrasenya</h2>
-      <input type="password" id="passwordInput">
-      <br>
-      <button onclick="validatePassword()">Validar</button>
+
+  <!-- MODAL AUTÈNTIC -->
+  <div id="modal-bg">
+    <div id="modal-box">
+      <h3>Contrasenya</h3>
+      <input id="passwordInput">
+      <br><br>
+      <button onclick="validatePassword()">Entrar</button>
     </div>
   </div>
+
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
@@ -154,34 +153,33 @@
     let key = null;
     let pendingAction = null;
 
-    function requestPassword(action) {
-      pendingAction = action;
-      document.getElementById("password-popup").style.display = "flex";
+    function askPassword(nextAction) {
+      pendingAction = nextAction;
+      document.getElementById("modal-bg").style.display = "flex";
     }
 
     window.validatePassword = function () {
-      key = document.getElementById("passwordInput").value.trim();
-      document.getElementById("password-popup").style.display = "none";
+      const entered = document.getElementById("passwordInput").value.trim();
+      if (!entered) return;
+
+      key = entered;
+      document.getElementById("modal-bg").style.display = "none";
 
       if (pendingAction) {
-        pendingAction();
+        const p = pendingAction;
         pendingAction = null;
+        p();
       }
     };
 
     window.updateScore = async function (team, delta) {
-      if (!key) {
-        return requestPassword(() => updateScore(team, delta));
-      }
+      if (!key) return askPassword(() => updateScore(team, delta));
 
       const scoreRef = ref(db, "scores/" + team);
-      const snapshot = await get(scoreRef);
-      const current = snapshot.exists() ? snapshot.val().points : 0;
+      const snap = await get(scoreRef);
+      const current = snap.exists() ? snap.val().points : 0;
 
-      await set(scoreRef, {
-        points: current + delta,
-        secret: key
-      });
+      await set(scoreRef, { points: current + delta, secret: key });
     };
 
     onValue(ref(db, "scores/equip1"), snap => {
@@ -195,4 +193,3 @@
 
 </body>
 </html>
-
