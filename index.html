@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Marcador DaCapoWarts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(to bottom, #0a0a3d, #2a1a5c);
+      color: #f5e6c8;
+      text-align: center;
+      min-height: 100vh;
+      background-image: url('Fons.png');
+      background-size: cover;
+      padding: 80px;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-shadow: 2px 2px 8px #000;
+      font-size: 3.5em;
+      margin-bottom: 60px;
+    }
+    
+    h2 {
+      font-family: 'Cinzel', serif;
+      text-shadow: 2px 2px 8px #000;
+      font-size: 2.5em;
+      margin-top: 45px;
+      margin-bottom: 20px;
+    }
+    
+    span {
+      font-size: 2.2em;
+      font-weight: bold;
+    }
+
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 36px;
+      border: 2px solid #f5e6c8;
+      border-radius: 12px;
+      background: linear-gradient(to top, #3a0c5a, #6a1fa5);
+      color: #f5e6c8;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 12px #6a1fa5;
+    }
+
+    button:hover {
+      transform: scale(1.1) rotate(-2deg);
+      box-shadow: 0 0 18px #ffd700;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Marcador DaCapoWarts</h1>
+
+  <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
+  <div>
+    <button onclick="updateScore('equip1', 5)">+5</button>
+    <button onclick="updateScore('equip1', 10)">+10</button>
+    <button onclick="updateScore('equip1', 15)">+15</button>
+    <button onclick="updateScore('equip1', 20)">+20</button>
+    <button onclick="updateScore('equip1', 30)">+30</button>
+    <button onclick="updateScore('equip1', 50)">+50</button>
+    <button onclick="updateScore('equip1', 70)">+70</button>
+    <br>
+    <button onclick="updateScore('equip1', -5)">-5</button>
+    <button onclick="updateScore('equip1', -10)">-10</button>
+    <button onclick="updateScore('equip1', -15)">-15</button>
+    <button onclick="updateScore('equip1', -20)">-20</button>
+    <button onclick="updateScore('equip1', -30)">-30</button>
+    <button onclick="updateScore('equip1', -50)">-50</button>
+    <button onclick="updateScore('equip1', -70)">-70</button>
+  </div>
+
+  <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
+  <div>
+    <button onclick="updateScore('equip2', 5)">+5</button>
+    <button onclick="updateScore('equip2', 10)">+10</button>
+    <button onclick="updateScore('equip2', 15)">+15</button>
+    <button onclick="updateScore('equip2', 20)">+20</button>
+    <button onclick="updateScore('equip2', 30)">+30</button>
+    <button onclick="updateScore('equip2', 50)">+50</button>
+    <button onclick="updateScore('equip2', 70)">+70</button>
+    <br>
+    <button onclick="updateScore('equip2', -5)">-5</button>
+    <button onclick="updateScore('equip2', -10)">-10</button>
+    <button onclick="updateScore('equip2', -15)">-15</button>
+    <button onclick="updateScore('equip2', -20)">-20</button>
+    <button onclick="updateScore('equip2', -30')">-30</button>
+    <button onclick="updateScore('equip2', -50')">-50</button>
+    <button onclick="updateScore('equip2', -70')">-70</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+    const app = initializeApp({
+      apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
+      authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
+      databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "marcador-dacapowarts-ffeca",
+      storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
+      messagingSenderId: "613762687721",
+      appId: "1:613762687721:web:e3582bdc41f7befec8c678"
+    });
+
+    const db = getDatabase(app);
+
+    let key = null;
+
+    function ensureKey() {
+      if (key) return true;
+      const entered = prompt("Introdueix la contrassenya d'administració:");
+      if (!entered) return false;
+      key = entered.trim();
+      return true;
+    }
+
+    window.updateScore = async function(team, delta) {
+      if (!ensureKey()) return;
+
+      const scoreRef = ref(db, "scores/" + team);
+      const snap = await get(scoreRef);
+      const current = snap.exists() ? snap.val().points : 0;
+
+      await set(scoreRef, {
+        points: current + delta
+      });
+    };
+
+    onValue(ref(db, "scores/equip1"), snap => {
+      if (snap.exists()) {
+        document.getElementById("score-equip1").textContent = snap.val().points;
+      }
+    });
+
+    onValue(ref(db, "scores/equip2"), snap => {
+      if (snap.exists()) {
+        document.getElementById("score-equip2").textContent = snap.val().points;
+      }
+    });
+  </script>
+
+</body>
+</html>
