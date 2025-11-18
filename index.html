@@ -55,18 +55,6 @@
       box-shadow: 0 0 18px #ffd700;
     }
 
-    #history-log {
-      max-height: 300px;
-      overflow-y: auto;
-      border: 2px solid #f5e6c8;
-      padding: 10px;
-      margin: 10px auto;
-      width: 80%;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 12px;
-      font-family: 'Cinzel', serif;
-    }
-
     /* MODAL CONTRASENYA */
     #password-modal {
       display:none;
@@ -184,10 +172,8 @@
     };
 
     window.confirmPassword = function() {
-      const pass = document.getElementById("modal-pass").value;
-      adminKey = pass;
+      adminKey = document.getElementById("modal-pass").value;
       document.getElementById("password-modal").style.display = "none";
-
       if (pendingAction) {
         pendingAction();
         pendingAction = null;
@@ -227,7 +213,6 @@
 
 </body>
 </html>
-
 
    
 
