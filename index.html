@@ -1,195 +1,161 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="UTF-8">
-  <title>Marcador DaCapoWarts</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Marcador DaCapoWarts</title>
 
-  <style>
-    body {
-      font-family: 'Cinzel', serif;
-      background: linear-gradient(to bottom, #0a0a3d, #2a1a5c);
-      color: #f5e6c8;
-      text-align: center;
-      min-height: 100vh;
-      background-image: url('Fons.png');
-      background-size: cover;
-      padding: 80px;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 
-    h1 { font-size: 3.5em; margin-bottom: 60px; }
-    h2 { font-size: 2.5em; margin: 45px 0 20px; }
-    span { font-size: 2.2em; font-weight: bold; }
+<style>
+  body {
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(to bottom, #0a0a3d, #2a1a5c);
+    color: #f5e6c8;
+    text-align: center;
+    min-height: 100vh;
+    background-image: url('Fons.png');
+    background-size: cover;
+    padding: 80px;
+  }
 
-    button {
-      margin: 10px;
-      padding: 12px 24px;
-      font-size: 36px;
-      border: 2px solid #f5e6c8;
-      border-radius: 12px;
-      background: linear-gradient(to top, #3a0c5a, #6a1fa5);
-      color: #f5e6c8;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 12px #6a1fa5;
-    }
+  h1, h2 {
+    text-shadow: 2px 2px 8px #000;
+  }
 
-    button:hover {
-      transform: scale(1.1) rotate(-2deg);
-      box-shadow: 0 0 18px #ffd700;
-    }
+  button {
+    margin: 10px;
+    padding: 12px 24px;
+    font-size: 28px;
+    border: 2px solid #f5e6c8;
+    border-radius: 12px;
+    background: linear-gradient(to top, #3a0c5a, #6a1fa5);
+    color: #f5e6c8;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-    /* MODAL */
-    #modal-bg {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(5px);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
+  button:hover {
+    transform: scale(1.1);
+  }
 
-    #modal-box {
-      background: #2a1a5c;
-      padding: 30px;
-      border-radius: 12px;
-      width: 320px;
-      border: 2px solid #f5e6c8;
-      text-align: center;
-    }
+  /* ---------- MODAL ---------- */
+  #modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
 
-    #passwordInput {
-      width: 90%;
-      font-size: 20px;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: none;
+  #modal-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    color: black;
+    text-align: center;
+    max-width: 300px;
+  }
 
-      /* Simula un password sense activar autofill */
-      -webkit-text-security: disc;
-      text-security: disc;
-      autocomplete: off;
-      inputmode: none;
-    }
-  </style>
+  #passwordInput {
+    width: 90%;
+    padding: 10px;
+    font-size: 20px;
+  }
+</style>
 </head>
 
 <body>
 
-  <h1>Marcador DaCapoWarts</h1>
+<h1>Marcador DaCapoWarts</h1>
 
-  <!-- EQUIP 1 -->
-  <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
-  <div>
-    <button onclick="updateScore('equip1', 5)">+5</button>
-    <button onclick="updateScore('equip1', 10)">+10</button>
-    <button onclick="updateScore('equip1', 15)">+15</button>
-    <button onclick="updateScore('equip1', 20)">+20</button>
-    <button onclick="updateScore('equip1', 30)">+30</button>
-    <button onclick="updateScore('equip1', 50)">+50</button>
-    <button onclick="updateScore('equip1', 70)">+70</button>
-    <br>
-    <button onclick="updateScore('equip1', -5)">-5</button>
-    <button onclick="updateScore('equip1', -10)">-10</button>
-    <button onclick="updateScore('equip1', -15)">-15</button>
-    <button onclick="updateScore('equip1', -20)">-20</button>
-    <button onclick="updateScore('equip1', -30)">-30</button>
-    <button onclick="updateScore('equip1', -50)">-50</button>
-    <button onclick="updateScore('equip1', -70)">-70</button>
+<h2>Ordre del Fènix: <span id="score-equip1">0</span></h2>
+<button onclick="updateScore('equip1', 5)">+5</button>
+<button onclick="updateScore('equip1', -5)">-5</button>
+
+<h2>Cavallers de la Mort: <span id="score-equip2">0</span></h2>
+<button onclick="updateScore('equip2', 5)">+5</button>
+<button onclick="updateScore('equip2', -5)">-5</button>
+
+<!-- ---------- MODAL ---------- -->
+<div id="modal-bg">
+  <div id="modal-box">
+    <h3>Contrasenya</h3>
+    <input id="passwordInput" type="password">
+    <br><br>
+    <button onclick="validatePassword()">Entrar</button>
   </div>
+</div>
 
-  <!-- EQUIP 2 -->
-  <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
-  <div>
-    <button onclick="updateScore('equip2', 5)">+5</button>
-    <button onclick="updateScore('equip2', 10)">+10</button>
-    <button onclick="updateScore('equip2', 15)">+15</button>
-    <button onclick="updateScore('equip2', 20)">+20</button>
-    <button onclick="updateScore('equip2', 30)">+30</button>
-    <button onclick="updateScore('equip2', 50)">+50</button>
-    <button onclick="updateScore('equip2', 70)">+70</button>
-    <br>
-    <button onclick="updateScore('equip2', -5)">-5</button>
-    <button onclick="updateScore('equip2', -10)">-10</button>
-    <button onclick="updateScore('equip2', -15)">-15</button>
-    <button onclick="updateScore('equip2', -20)">-20</button>
-    <button onclick="updateScore('equip2', -30)">-30</button>
-    <button onclick="updateScore('equip2', -50)">-50</button>
-    <button onclick="updateScore('equip2', -70)">-70</button>
-  </div>
+<!-- ---------- JAVASCRIPT ---------- -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
 
+const app = initializeApp({
+  apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
+  authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
+  databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "marcador-dacapowarts-ffeca",
+  storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
+  messagingSenderId: "613762687721",
+  appId: "1:613762687721:web:e3582bdc41f7befec8c678"
+});
 
-  <!-- MODAL AUTÈNTIC -->
-  <div id="modal-bg">
-    <div id="modal-box">
-      <h3>Contrasenya</h3>
-      <input id="passwordInput">
-      <br><br>
-      <button onclick="validatePassword()">Entrar</button>
-    </div>
-  </div>
+const db = getDatabase(app);
 
+/* ---------------- Password modal ---------------- */
+let storedPassword = null;
+let pendingAction = null;
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+function askPassword(action) {
+  pendingAction = action;
+  document.getElementById("modal-bg").style.display = "flex";
+  document.getElementById("passwordInput").value = "";
+  document.getElementById("passwordInput").focus();
+}
 
-    const app = initializeApp({
-      apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
-      authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
-      databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "marcador-dacapowarts-ffeca",
-      storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
-      messagingSenderId: "613762687721",
-      appId: "1:613762687721:web:e3582bdc41f7befec8c678"
-    });
+window.validatePassword = function () {
+  const pwd = document.getElementById("passwordInput").value.trim();
+  if (!pwd) return;
 
-    const db = getDatabase(app);
+  storedPassword = pwd;
 
-    let key = null;
-    let pendingAction = null;
+  document.getElementById("modal-bg").style.display = "none";
 
-    function askPassword(nextAction) {
-      pendingAction = nextAction;
-      document.getElementById("modal-bg").style.display = "flex";
-    }
+  if (pendingAction) {
+    pendingAction();
+    pendingAction = null;
+  }
+};
 
-    window.validatePassword = function () {
-      const entered = document.getElementById("passwordInput").value.trim();
-      if (!entered) return;
+/* ---------------- Update score ---------------- */
+window.updateScore = async function (team, delta) {
+  if (!storedPassword) {
+    askPassword(() => updateScore(team, delta));
+    return;
+  }
 
-      key = entered;
-      document.getElementById("modal-bg").style.display = "none";
+  const scoreRef = ref(db, "scores/" + team);
+  const snapshot = await get(scoreRef);
+  const current = snapshot.exists() ? snapshot.val().points : 0;
 
-      if (pendingAction) {
-        const p = pendingAction;
-        pendingAction = null;
-        p();
-      }
-    };
+  await set(scoreRef, {
+    points: current + delta,
+    secret: storedPassword
+  });
+};
 
-    window.updateScore = async function (team, delta) {
-      if (!key) return askPassword(() => updateScore(team, delta));
+/* ---------------- Realtime updates ---------------- */
+onValue(ref(db, "scores/equip1"), snap => {
+  if (snap.exists()) document.getElementById("score-equip1").textContent = snap.val().points;
+});
 
-      const scoreRef = ref(db, "scores/" + team);
-      const snap = await get(scoreRef);
-      const current = snap.exists() ? snap.val().points : 0;
-
-      await set(scoreRef, { points: current + delta, secret: key });
-    };
-
-    onValue(ref(db, "scores/equip1"), snap => {
-      if (snap.exists()) document.getElementById("score-equip1").textContent = snap.val().points;
-    });
-
-    onValue(ref(db, "scores/equip2"), snap => {
-      if (snap.exists()) document.getElementById("score-equip2").textContent = snap.val().points;
-    });
-  </script>
+onValue(ref(db, "scores/equip2"), snap => {
+  if (snap.exists()) document.getElementById("score-equip2").textContent = snap.val().points;
+});
+</script>
 
 </body>
 </html>
+
