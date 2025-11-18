@@ -16,7 +16,7 @@
       padding: 80px;
     }
 
-    h1, {
+    h1 {
       font-family: 'Cinzel', serif;
       text-shadow: 2px 2px 8px #000;
       font-size: 3.5em;
@@ -68,51 +68,69 @@
 
     .positive { color: #7CFC00; } /* verd màgic */
     .negative { color: #FF4500; } /* vermell foc */
+
+    /* petits estils per l'input d'admin */
+    #admin-area { margin-bottom: 30px; }
+    #admin-pass { padding:8px; font-size:16px; }
+    #set-key-btn { padding:8px 12px; font-size:16px; margin-left:8px;}
   </style>
 </head>
 <body>
   <h1>Marcador DaCapoWarts</h1>
 
-  <!-- =================== Equip 1 =================== -->
-  <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
-  <button onclick="updateScore('equip1', 5)">+5</button>
-  <button onclick="updateScore('equip1', 10)">+10</button>
-  <button onclick="updateScore('equip1', 15)">+15</button>
-  <button onclick="updateScore('equip1', 20)">+20</button>
-  <button onclick="updateScore('equip1', 30)">+30</button>
-  <button onclick="updateScore('equip1', 50)">+50</button>
-  <button onclick="updateScore('equip1', 70)">+70</button>
-  <br>
-  <button onclick="updateScore('equip1', -5)">-5</button>
-  <button onclick="updateScore('equip1', -10)">-10</button>
-  <button onclick="updateScore('equip1', -15)">-15</button>
-  <button onclick="updateScore('equip1', -20)">-20</button>
-  <button onclick="updateScore('equip1', -30)">-30</button>
-  <button onclick="updateScore('equip1', -50)">-50</button>
-  <button onclick="updateScore('equip1', -70)">-70</button>
+  <!-- Àrea per introduir la contrasenya d'admin -->
+  <div id="admin-area">
+    <input id="admin-pass" type="password" placeholder="Introdueix la contrasenya d'admin">
+    <button id="set-key-btn" onclick="setAdminKey()">Validar contrasenya</button>
+    <p id="pass-info" style="color:lightgray; font-size:14px;">Introdueix la contrasenya si ets admin. La contrasenya no està al codi.</p>
+  </div>
 
-  <!-- =================== Equip 2 =================== -->
+  <!-- Puntacions -->
+  <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
+  <div>
+    <button onclick="updateScore('equip1', 5)">+5</button>
+    <button onclick="updateScore('equip1', 10)">+10</button>
+    <button onclick="updateScore('equip1', 15)">+15</button>
+    <button onclick="updateScore('equip1', 20)">+20</button>
+    <button onclick="updateScore('equip1', 30)">+30</button>
+    <button onclick="updateScore('equip1', 50)">+50</button>
+    <button onclick="updateScore('equip1', 70)">+70</button>
+    <br>
+    <button onclick="updateScore('equip1', -5)">-5</button>
+    <button onclick="updateScore('equip1', -10)">-10</button>
+    <button onclick="updateScore('equip1', -15)">-15</button>
+    <button onclick="updateScore('equip1', -20)">-20</button>
+    <button onclick="updateScore('equip1', -30)">-30</button>
+    <button onclick="updateScore('equip1', -50)">-50</button>
+    <button onclick="updateScore('equip1', -70)">-70</button>
+  </div>
+
   <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
-  <button onclick="updateScore('equip2', 5)">+5</button>
-  <button onclick="updateScore('equip2', 10)">+10</button>
-  <button onclick="updateScore('equip2', 15)">+15</button>
-  <button onclick="updateScore('equip2', 20)">+20</button>
-  <button onclick="updateScore('equip2', 30)">+30</button>
-  <button onclick="updateScore('equip2', 50)">+50</button>
-  <button onclick="updateScore('equip2', 70)">+70</button>
-  <br>
-  <button onclick="updateScore('equip2', -5)">-5</button>
-  <button onclick="updateScore('equip2', -10)">-10</button>
-  <button onclick="updateScore('equip2', -15)">-15</button>
-  <button onclick="updateScore('equip2', -20)">-20</button>
-  <button onclick="updateScore('equip2', -30)">-30</button>
-  <button onclick="updateScore('equip2', -50)">-50</button>
-  <button onclick="updateScore('equip2', -70)">-70</button>
+  <div>
+    <button onclick="updateScore('equip2', 5)">+5</button>
+    <button onclick="updateScore('equip2', 10)">+10</button>
+    <button onclick="updateScore('equip2', 15)">+15</button>
+    <button onclick="updateScore('equip2', 20)">+20</button>
+    <button onclick="updateScore('equip2', 30)">+30</button>
+    <button onclick="updateScore('equip2', 50)">+50</button>
+    <button onclick="updateScore('equip2', 70)">+70</button>
+    <br>
+    <button onclick="updateScore('equip2', -5)">-5</button>
+    <button onclick="updateScore('equip2', -10)">-10</button>
+    <button onclick="updateScore('equip2', -15)">-15</button>
+    <button onclick="updateScore('equip2', -20)">-20</button>
+    <button onclick="updateScore('equip2', -30)">-30</button>
+    <button onclick="updateScore('equip2', -50)">-50</button>
+    <button onclick="updateScore('equip2', -70)">-70</button>
+  </div>
+
+  <!-- Historial (opcional) -->
+  <div id="history-log"></div>
 
   <!-- =================== Script Firebase =================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getDatabase, ref, set, get, onChildAdded } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
@@ -127,15 +145,42 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
- 
- // Funció per actualitzar marcador sense historial ni usuari
+    // **NO posar la contrasenya aquí**. La contrasenya es comprova a Firebase Rules.
+    // L'usuari escriu la contrasenya al navegador; la guardem temporalment a adminKey.
+    let adminKey = null;
+
+    // Funció per establir la clau que l'admin introdueix (només queda al navegador)
+    window.setAdminKey = function() {
+      adminKey = document.getElementById('admin-pass').value || null;
+      const info = document.getElementById('pass-info');
+      if (adminKey) {
+        info.textContent = "Clau introduïda localment. Les escriptures seran verificades pel servidor.";
+      } else {
+        info.textContent = "No hi ha cap clau. Les escriptures seran rebutjades.";
+      }
+    };
+
+    // Funció per actualitzar marcador (sempre s'envia el camp 'secret' amb la clau local)
     window.updateScore = async function(team, delta) {
-      const scoreRef = ref(db, 'scores/' + team);
-      const snapshot = await get(scoreRef);
-      const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
-      const newPoints = currentPoints + delta;
-      await set(scoreRef, { points: newPoints });
-      document.getElementById(`score-${team}`).textContent = newPoints;
+      try {
+        const scoreRef = ref(db, 'scores/' + team);
+        const snapshot = await get(scoreRef);
+        const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
+        const newPoints = currentPoints + delta;
+
+        // Enviem l'objecte amb el camp 'secret' que Firebase Rules comprovarà
+        await set(scoreRef, {
+          points: newPoints,
+          secret: adminKey  // null si no hi ha clau; firesbase Rules el compararà
+        });
+
+        // Actualitzar UI local (si Firebase accepta la write, la UI serà actualitzada ara)
+        document.getElementById(`score-${team}`).textContent = newPoints;
+      } catch (err) {
+        // Si Firebase rebutja l'escriptura apareix un error a la consola (opcional)
+        console.error("Error al intentar actualitzar puntuació:", err);
+        // També podries mostrar un missatge a l'usuari si ho desitges
+      }
     };
 
     // Inicialitzar valors de marcador al carregar la pàgina
@@ -147,9 +192,19 @@
       const snapshot2 = await get(ref(db, 'scores/equip2'));
       const points2 = snapshot2.exists() ? snapshot2.val().points : 0;
       document.getElementById('score-equip2').textContent = points2;
+
+      // Si vols que la UI s'actualitzi en temps real quan un altre usuari canvia,
+      // pots utilitzar onValue en comptes de get → exemple:
+      onValue(ref(db, 'scores/equip1'), (snap) => {
+        if (snap.exists()) document.getElementById('score-equip1').textContent = snap.val().points;
+      });
+      onValue(ref(db, 'scores/equip2'), (snap) => {
+        if (snap.exists()) document.getElementById('score-equip2').textContent = snap.val().points;
+      });
     });
   </script>
 </body>
 </html>
+
    
 
