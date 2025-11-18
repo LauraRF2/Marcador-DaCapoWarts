@@ -23,7 +23,7 @@
       font-size: 3.5em;
       margin-bottom: 60px;
     }
-    
+
     h2 {
       font-family: 'Cinzel', serif;
       text-shadow: 2px 2px 8px #000;
@@ -31,7 +31,7 @@
       margin-top: 45px;
       margin-bottom: 20px;
     }
-    
+
     span {
       font-size: 2.2em;
       font-weight: bold;
@@ -93,9 +93,9 @@
     <button onclick="updateScore('equip2', -10)">-10</button>
     <button onclick="updateScore('equip2', -15)">-15</button>
     <button onclick="updateScore('equip2', -20)">-20</button>
-    <button onclick="updateScore('equip2', -30')">-30</button>
-    <button onclick="updateScore('equip2', -50')">-50</button>
-    <button onclick="updateScore('equip2', -70')">-70</button>
+    <button onclick="updateScore('equip2', -30)">-30</button>
+    <button onclick="updateScore('equip2', -50)">-50</button>
+    <button onclick="updateScore('equip2', -70)">-70</button>
   </div>
 
   <script type="module">
@@ -115,24 +115,30 @@
     const db = getDatabase(app);
 
     let key = null;
+    const PASSWORD = "PotaDeCabra";
 
     function ensureKey() {
       if (key) return true;
       const entered = prompt("Introdueix la contrassenya d'administració:");
       if (!entered) return false;
       key = entered.trim();
-      return true;
+      return key === PASSWORD;
     }
 
     window.updateScore = async function(team, delta) {
-      if (!ensureKey()) return;
+      if (!ensureKey()) {
+        alert("Contrasenya incorrecta");
+        key = null;
+        return;
+      }
 
       const scoreRef = ref(db, "scores/" + team);
       const snap = await get(scoreRef);
       const current = snap.exists() ? snap.val().points : 0;
 
       await set(scoreRef, {
-        points: current + delta
+        points: current + delta,
+        secret: PASSWORD   // IMPORTANT: necessari per les regles de Firebase
       });
     };
 
