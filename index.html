@@ -146,71 +146,76 @@
   </div>
 
   <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+  import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
-      authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
-      databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "marcador-dacapowarts-ffeca",
-      storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
-      messagingSenderId: "613762687721",
-      appId: "1:613762687721:web:e3582bdc41f7befec8c678"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
+    authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
+    databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "marcador-dacapowarts-ffeca",
+    storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
+    messagingSenderId: "613762687721",
+    appId: "1:613762687721:web:e3582bdc41f7befec8c678"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-    let adminKey = null;
-    let pendingAction = null;
+  let adminKey = null;        // Es guardarà un cop validada la contrasenya
+  let pendingAction = null;   // Acció que es volia fer abans de tenir la contrasenya
 
-    window.requestPassword = function(action) {
-      pendingAction = action;
-      document.getElementById("password-modal").style.display = "flex";
-    };
+  // Obrir modal quan cal
+  function requestPassword(action) {
+    pendingAction = action;
+    document.getElementById("password-modal").style.display = "flex";
+  }
 
-    window.confirmPassword = function() {
-      adminKey = document.getElementById("modal-pass").value;
-      document.getElementById("password-modal").style.display = "none";
-      if (pendingAction) {
-        pendingAction();
-        pendingAction = null;
-      }
-    };
+  // Validar contrasenya i continuar amb l'acció pendent
+  window.confirmPassword = function() {
+    adminKey = document.getElementById("modal-pass").value.trim();
+    document.getElementById("password-modal").style.display = "none";
 
-    window.updateScore = async function(team, delta) {
-      if (!adminKey) {
-        return requestPassword(() => updateScore(team, delta));
-      }
+    if (pendingAction) {
+      pendingAction();
+      pendingAction = null;
+    }
+  };
 
-      try {
-        const scoreRef = ref(db, 'scores/' + team);
-        const snapshot = await get(scoreRef);
-        const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
-        const newPoints = currentPoints + delta;
+  // Actualitzar puntuació
+  window.updateScore = async function(team, delta) {
+    // Si no hi ha contrasenya validada, obrir modal
+    if (!adminKey) {
+      return requestPassword(() => updateScore(team, delta));
+    }
 
-        await set(scoreRef, {
-          points: newPoints,
-          secret: adminKey
-        });
+    try {
+      const scoreRef = ref(db, 'scores/' + team);
+      const snapshot = await get(scoreRef);
+      const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
+      const newPoints = currentPoints + delta;
 
-      } catch (err) {
-        console.error("Error:", err);
-      }
-    };
-
-    window.addEventListener('load', async () => {
-      onValue(ref(db, 'scores/equip1'), snap => {
-        if (snap.exists()) document.getElementById('score-equip1').textContent = snap.val().points;
+      await set(scoreRef, {
+        points: newPoints,
+        secret: adminKey
       });
-      onValue(ref(db, 'scores/equip2'), snap => {
-        if (snap.exists()) document.getElementById('score-equip2').textContent = snap.val().points;
-      });
+
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  };
+
+  // Carregar puntuacions en temps real
+  window.addEventListener('load', () => {
+    onValue(ref(db, 'scores/equip1'), snap => {
+      if (snap.exists()) document.getElementById('score-equip1').textContent = snap.val().points;
     });
-  </script>
-
+    onValue(ref(db, 'scores/equip2'), snap => {
+      if (snap.exists()) document.getElementById('score-equip2').textContent = snap.val().points;
+    });
+  });
+</script>  
 </body>
 </html>
 
