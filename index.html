@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Marcador DaCapoWarts</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet">
-
   <style>
     body {
       font-family: 'Cinzel', serif;
@@ -12,7 +11,7 @@
       color: #f5e6c8;
       text-align: center;
       min-height: 100vh;
-      background-image: url('Fons.png');
+      background-image: url('Fons.png'); 
       background-size: cover;
       padding: 80px;
     }
@@ -23,7 +22,7 @@
       font-size: 3.5em;
       margin-bottom: 60px;
     }
-
+    
     h2 {
       font-family: 'Cinzel', serif;
       text-shadow: 2px 2px 8px #000;
@@ -31,7 +30,7 @@
       margin-top: 45px;
       margin-bottom: 20px;
     }
-
+    
     span {
       font-size: 2.2em;
       font-weight: bold;
@@ -56,53 +55,51 @@
     }
   </style>
 </head>
-
 <body>
   <h1>Marcador DaCapoWarts</h1>
 
+  <!-- =================== Equip 1 =================== -->
   <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
-  <div>
-    <button onclick="updateScore('equip1', 5)">+5</button>
-    <button onclick="updateScore('equip1', 10)">+10</button>
-    <button onclick="updateScore('equip1', 15)">+15</button>
-    <button onclick="updateScore('equip1', 20)">+20</button>
-    <button onclick="updateScore('equip1', 30)">+30</button>
-    <button onclick="updateScore('equip1', 50)">+50</button>
-    <button onclick="updateScore('equip1', 70)">+70</button>
-    <br>
-    <button onclick="updateScore('equip1', -5)">-5</button>
-    <button onclick="updateScore('equip1', -10)">-10</button>
-    <button onclick="updateScore('equip1', -15)">-15</button>
-    <button onclick="updateScore('equip1', -20)">-20</button>
-    <button onclick="updateScore('equip1', -30)">-30</button>
-    <button onclick="updateScore('equip1', -50)">-50</button>
-    <button onclick="updateScore('equip1', -70)">-70</button>
-  </div>
+  <button onclick="updateScore('equip1', 5)">+5</button>
+  <button onclick="updateScore('equip1', 10)">+10</button>
+  <button onclick="updateScore('equip1', 15)">+15</button>
+  <button onclick="updateScore('equip1', 20)">+20</button>
+  <button onclick="updateScore('equip1', 30)">+30</button>
+  <button onclick="updateScore('equip1', 50)">+50</button>
+  <button onclick="updateScore('equip1', 70)">+70</button>
+  <br>
+  <button onclick="updateScore('equip1', -5)">-5</button>
+  <button onclick="updateScore('equip1', -10)">-10</button>
+  <button onclick="updateScore('equip1', -15)">-15</button>
+  <button onclick="updateScore('equip1', -20)">-20</button>
+  <button onclick="updateScore('equip1', -30)">-30</button>
+  <button onclick="updateScore('equip1', -50)">-50</button>
+  <button onclick="updateScore('equip1', -70)">-70</button>
 
+  <!-- =================== Equip 2 =================== -->
   <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
-  <div>
-    <button onclick="updateScore('equip2', 5)">+5</button>
-    <button onclick="updateScore('equip2', 10)">+10</button>
-    <button onclick="updateScore('equip2', 15)">+15</button>
-    <button onclick="updateScore('equip2', 20)">+20</button>
-    <button onclick="updateScore('equip2', 30)">+30</button>
-    <button onclick="updateScore('equip2', 50)">+50</button>
-    <button onclick="updateScore('equip2', 70)">+70</button>
-    <br>
-    <button onclick="updateScore('equip2', -5)">-5</button>
-    <button onclick="updateScore('equip2', -10)">-10</button>
-    <button onclick="updateScore('equip2', -15)">-15</button>
-    <button onclick="updateScore('equip2', -20)">-20</button>
-    <button onclick="updateScore('equip2', -30)">-30</button>
-    <button onclick="updateScore('equip2', -50)">-50</button>
-    <button onclick="updateScore('equip2', -70)">-70</button>
-  </div>
+  <button onclick="updateScore('equip2', 5)">+5</button>
+  <button onclick="updateScore('equip2', 10)">+10</button>
+  <button onclick="updateScore('equip2', 15)">+15</button>
+  <button onclick="updateScore('equip2', 20)">+20</button>
+  <button onclick="updateScore('equip2', 30)">+30</button>
+  <button onclick="updateScore('equip2', 50)">+50</button>
+  <button onclick="updateScore('equip2', 70)">+70</button>
+  <br>
+  <button onclick="updateScore('equip2', -5)">-5</button>
+  <button onclick="updateScore('equip2', -10)">-10</button>
+  <button onclick="updateScore('equip2', -15)">-15</button>
+  <button onclick="updateScore('equip2', -20)">-20</button>
+  <button onclick="updateScore('equip2', -30)">-30</button>
+  <button onclick="updateScore('equip2', -50)">-50</button>
+  <button onclick="updateScore('equip2', -70)">-70</button>
 
+  <!-- =================== Script Firebase =================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
 
-    const app = initializeApp({
+    const firebaseConfig = {
       apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
       authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
       databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
@@ -110,50 +107,61 @@
       storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
       messagingSenderId: "613762687721",
       appId: "1:613762687721:web:e3582bdc41f7befec8c678"
-    });
+    };
 
+    const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let key = null;
-    const PASSWORD = "PotaDeCabra";
+    // Variable de sessió que desapareix quan refresques
+    let userSecret = null;
 
-    function ensureKey() {
-      if (key) return true;
-      const entered = prompt("Introdueix la contrassenya d'administració:");
-      if (!entered) return false;
-      key = entered.trim();
-      return key === PASSWORD;
+    async function askPassword() {
+      const pwd = prompt("Introdueix la contrassenya per modificar el marcador:");
+      if (!pwd) return null;
+      return pwd;
     }
 
+    // Funció per actualitzar marcador amb contrassenya externa
     window.updateScore = async function(team, delta) {
-      if (!ensureKey()) {
-        alert("Contrasenya incorrecta");
-        key = null;
-        return;
+      // Si no tenim contrassenya → demanar-la
+      if (!userSecret) {
+        userSecret = await askPassword();
+        if (!userSecret) return; // cancel·lat
       }
 
       const scoreRef = ref(db, "scores/" + team);
-      const snap = await get(scoreRef);
-      const current = snap.exists() ? snap.val().points : 0;
 
-      await set(scoreRef, {
-        points: current + delta,
-        secret: PASSWORD   // IMPORTANT: necessari per les regles de Firebase
-      });
+      // Llegim l’estat actual
+      const snapshot = await get(scoreRef);
+      const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
+
+      // Intentem escriure enviant secret
+      const newPoints = currentPoints + delta;
+      try {
+        await set(scoreRef, {
+          points: newPoints,
+          secret: userSecret     // <-- Això no és visible al codi
+        });
+      } catch (err) {
+        alert("⚠️ No tens permisos. Contrassenya incorrecta.");
+        userSecret = null;
+        return;
+      }
+
+      document.getElementById(`score-${team}`).textContent = newPoints;
     };
 
-    onValue(ref(db, "scores/equip1"), snap => {
-      if (snap.exists()) {
-        document.getElementById("score-equip1").textContent = snap.val().points;
-      }
+    // Inicialitzar valors de marcador al carregar la pàgina
+    window.addEventListener('load', async () => {
+      const snapshot1 = await get(ref(db, 'scores/equip1'));
+      document.getElementById('score-equip1').textContent =
+        snapshot1.exists() ? snapshot1.val().points : 0;
+
+      const snapshot2 = await get(ref(db, 'scores/equip2'));
+      document.getElementById('score-equip2').textContent =
+        snapshot2.exists() ? snapshot2.val().points : 0;
     });
 
-    onValue(ref(db, "scores/equip2"), snap => {
-      if (snap.exists()) {
-        document.getElementById("score-equip2").textContent = snap.val().points;
-      }
-    });
   </script>
-
 </body>
 </html>
