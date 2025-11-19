@@ -204,7 +204,7 @@
     } catch (err) {
       alert("⚠️ Contrassenya incorrecta.");
       userSecret = null;
-      return requestPassword(() => updateScore(team, delta));
+      return ;
     }
 
     document.getElementById(`score-${team}`).textContent = newPoints;
