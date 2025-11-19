@@ -96,37 +96,40 @@
   <button onclick="updateScore('equip2', -70)">-70</button>
 
 
-<!-- =============== MODAL CONTRASSENYA (ABANS DEL SCRIPT!) =============== -->
+<!-- =============== MODAL CONTRASSENYA (RESPONSIVE) =============== -->
 <div id="password-modal" style="
   display:none;
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  inset:0;
   background:rgba(0,0,0,0.7);
   backdrop-filter: blur(4px);
   justify-content:center;
   align-items:center;
-  padding:20px">
+  padding:20px;">
   
-  <div style="
+  <div id="password-box" style="
     background:#2a1a5c;
-    padding:25px;
+    padding:30px;
     width:90%;
-    max-width:350px;
+    max-width:450px;
     border:2px solid #f5e6c8;
     border-radius:20px;
     text-align:center;
-    box-shadow:0 0 25px #000;">
+    box-shadow:0 0 25px #000;
+    transition:0.3s;">
     
-    <h2 style="margin-bottom:15px; font-size:18px; line-height:1.4;">
+    <h2 id="password-title" style="
+      margin-bottom:15px;
+      font-size:20px;
+      line-height:1.4;">
       Només l'equip docent autoritzat pot modificar el marcador!<br>
       Introdueix la contrassenya
     </h2>
     
     <input id="password-input" type="password" style="
-      padding:10px;
+      padding:12px;
       width:100%;
-      font-size:20px;
+      font-size:22px;
       border-radius:10px;
       border:2px solid #f5e6c8;
       background:#fff;">
@@ -134,16 +137,52 @@
     <br><br>
     
     <button onclick="submitPassword()" style="
-      padding:10px 20px;
-      font-size:20px;
-      border-radius:10px;
+      padding:12px 25px;
+      font-size:22px;
+      border-radius:12px;
       border:2px solid #f5e6c8;
       background: linear-gradient(to top, #3a0c5a, #6a1fa5);
-      color:#f5e6c8;">
+      color:#f5e6c8;
+      cursor:pointer;">
       Entrar
     </button>
   </div>
 </div>
+
+<style>
+  /* ======== RESPONSIVE ADAPTATION ======== */
+
+  /* Mòbil petit: modal més compacte */
+  @media (max-width: 480px) {
+    #password-box {
+      padding: 20px;
+      width: 95%;
+      max-width: 320px;
+    }
+    #password-title {
+      font-size: 16px;
+    }
+    #password-input {
+      font-size: 18px;
+      padding: 10px;
+    }
+  }
+
+  /* Ordinador: modal més ample i airejat */
+  @media (min-width: 900px) {
+    #password-box {
+      max-width: 550px;
+      padding: 40px;
+    }
+    #password-title {
+      font-size: 24px;
+    }
+    #password-input {
+      font-size: 24px;
+      padding: 14px;
+    }
+  }
+</style>
 
 
 
