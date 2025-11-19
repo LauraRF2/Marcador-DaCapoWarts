@@ -183,7 +183,10 @@
 
   window.submitPassword = function () {
     const pwd = document.getElementById("password-input").value.trim();
-    if (!pwd) return;
+    if (!pwd) {
+      document.getElementById("password-modal").style.display = "none";
+      return;
+    }
 
     userSecret = pwd;
     document.getElementById("password-modal").style.display = "none";
