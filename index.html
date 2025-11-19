@@ -60,7 +60,7 @@
   <h1>Marcador DaCapoWarts</h1>
 
   <!-- =================== Equip 1 =================== -->
-  <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</span></h2>
+  <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
   <button onclick="updateScore('equip1', 5)">+5</button>
   <button onclick="updateScore('equip1', 10)">+10</button>
   <button onclick="updateScore('equip1', 15)">+15</button>
@@ -95,88 +95,8 @@
   <button onclick="updateScore('equip2', -50)">-50</button>
   <button onclick="updateScore('equip2', -70)">-70</button>
 
-<!-- =================== Script Firebase =================== -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
-    authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
-    databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "marcador-dacapowarts-ffeca",
-    storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
-    messagingSenderId: "613762687721",
-    appId: "1:613762687721:web:e3582bdc41f7befec8c678"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // ---------------- CONTRASSENYA (modal) ----------------
-  let userSecret = null;
-  let pendingAction = null;
-
-  function requestPassword(action) {
-    pendingAction = action;
-    document.getElementById("password-modal").style.display = "flex";
-    document.getElementById("password-input").value = "";
-    document.getElementById("password-input").focus();
-  }
-
-  window.submitPassword = function () {
-    const pwd = document.getElementById("password-input").value.trim();
-    if (!pwd) return;
-
-    userSecret = pwd;
-    document.getElementById("password-modal").style.display = "none";
-
-    if (pendingAction) {
-      pendingAction();
-      pendingAction = null;
-    }
-  };
-
-  // ---------------- UPDATE SCORE ----------------
-  window.updateScore = async function(team, delta) {
-    if (!userSecret) {
-      return requestPassword(() => updateScore(team, delta));
-    }
-
-    const scoreRef = ref(db, "scores/" + team);
-    const snapshot = await get(scoreRef);
-    const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
-
-    const newPoints = currentPoints + delta;
-
-    try {
-      await set(scoreRef, {
-        points: newPoints,
-        secret: userSecret
-      });
-    } catch (err) {
-      alert("⚠️ Contrassenya incorrecta.");
-      userSecret = null;
-      return requestPassword(() => updateScore(team, delta));
-    }
-
-    document.getElementById(`score-${team}`).textContent = newPoints;
-  };
-
-  // ---------------- Inicialització ----------------
-  window.addEventListener('load', async () => {
-    const snap1 = await get(ref(db, 'scores/equip1'));
-    document.getElementById('score-equip1').textContent =
-      snap1.exists() ? snap1.val().points : 0;
-
-    const snap2 = await get(ref(db, 'scores/equip2'));
-    document.getElementById('score-equip2').textContent =
-      snap2.exists() ? snap2.val().points : 0;
-  });
-
-</script>
-
-<!-- =============== MODAL CONTRASSENYA =============== -->
+<!-- =============== MODAL CONTRASSENYA (ABANS DEL SCRIPT!) =============== -->
 <div id="password-modal" style="
   display:none;
   position:fixed;
@@ -212,12 +132,94 @@
       font-size:24px;
       border-radius:12px;
       border:2px solid #f5e6c8;
-      background: linear-gradient(to top, #3a0x5a, #6a1fa5);
+      background: linear-gradient(to top, #3a0c5a, #6a1fa5);
       color:#f5e6c8;">
       Entrar
     </button>
   </div>
 </div>
 
+
+
+<!-- =================== SCRIPT FIREBASE =================== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+  import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCu8eXQUhD8vd-W8NfCfFurDkWxG0o5En8",
+    authDomain: "marcador-dacapowarts-ffeca.firebaseapp.com",
+    databaseURL: "https://marcador-dacapowarts-ffeca-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "marcador-dacapowarts-ffeca",
+    storageBucket: "marcador-dacapowarts-ffeca.firebasestorage.app",
+    messagingSenderId: "613762687721",
+    appId: "1:613762687721:web:e3582bdc41f7befec8c678"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  /* ================= CONTRASSENYA ================= */
+  let userSecret = null;
+  let pendingAction = null;
+
+  function requestPassword(action) {
+    pendingAction = action;
+    document.getElementById("password-modal").style.display = "flex";
+    document.getElementById("password-input").value = "";
+    document.getElementById("password-input").focus();
+  }
+
+  window.submitPassword = function () {
+    const pwd = document.getElementById("password-input").value.trim();
+    if (!pwd) return;
+
+    userSecret = pwd;
+    document.getElementById("password-modal").style.display = "none";
+
+    if (pendingAction) {
+      pendingAction();
+      pendingAction = null;
+    }
+  };
+
+  /* ================= ACTUALITZAR MARCADOR ================= */
+  window.updateScore = async function(team, delta) {
+    if (!userSecret) {
+      return requestPassword(() => updateScore(team, delta));
+    }
+
+    const scoreRef = ref(db, "scores/" + team);
+    const snapshot = await get(scoreRef);
+    const currentPoints = snapshot.exists() ? snapshot.val().points : 0;
+    const newPoints = currentPoints + delta;
+
+    try {
+      await set(scoreRef, {
+        points: newPoints,
+        secret: userSecret
+      });
+    } catch (err) {
+      alert("⚠️ Contrassenya incorrecta.");
+      userSecret = null;
+      return requestPassword(() => updateScore(team, delta));
+    }
+
+    document.getElementById(`score-${team}`).textContent = newPoints;
+  };
+
+  /* ================= CARREGAR PUNTS ================= */
+  window.addEventListener('load', async () => {
+    const snap1 = await get(ref(db, 'scores/equip1'));
+    document.getElementById('score-equip1').textContent =
+      snap1.exists() ? snap1.val().points : 0;
+
+    const snap2 = await get(ref(db, 'scores/equip2'));
+    document.getElementById('score-equip2').textContent =
+      snap2.exists() ? snap2.val().points : 0;
+  });
+</script>
+
 </body>
 </html>
+
