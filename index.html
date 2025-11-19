@@ -55,6 +55,53 @@
     }
   </style>
 </head>
+
+<!-- =============== MODAL DE CONTRASSENYA =============== -->
+<div id="password-modal" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  justify-content:center;
+  align-items:center;">
+  
+  <div style="
+    background:#2a1a5c;
+    padding:40px;
+    border:2px solid #f5e6c8;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 20px #000;">
+    
+    <h2 style="margin-bottom:20px;">Introdueix la contrassenya</h2>
+    
+    <input id="password-input" type="password" style="
+      padding:10px;
+      width:80%;
+      font-size:22px;
+      border-radius:10px;
+      border:2px solid #f5e6c8;
+      background:#fff;">
+      
+    <br><br>
+    
+    <button onclick="submitPassword()" style="
+      padding:10px 20px;
+      font-size:24px;
+      border-radius:12px;
+      border:2px solid #f5e6c8;
+      background: linear-gradient(to top, #3a0c5a, #6a1fa5);
+      color:#f5e6c8;
+      cursor:pointer;">
+      Entrar
+    </button>
+  </div>
+</div>
+
+
+  
 <body>
   <h1>Marcador DaCapoWarts</h1>
 
@@ -116,7 +163,7 @@
     let userSecret = null;
 
     async function askPassword() {
-      const pwd = prompt("Introdueix la contrassenya per modificar el marcador:");
+      const pwd = prompt("Només l'equip docent autoritzat pot modificar el marcador! Introdueix la contrassenya per desbloquejar-ho:");
       if (!pwd) return null;
       return pwd;
     }
