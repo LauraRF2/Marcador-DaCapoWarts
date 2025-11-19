@@ -190,6 +190,22 @@
 
     userSecret = pwd;
     document.getElementById("password-modal").style.display = "none";
+    
+       // === Restablir zoom al tancar la finestra de contrassenya ===
+    setTimeout(() => {
+        // Scroll a la posició 0 per evitar que el mòbil quedi desplaçat
+        window.scrollTo(0, 0);
+
+        // Alguns navegadors interpreten aquest "reflow" com un reset del zoom
+        document.body.style.transform = "scale(1)";
+        document.body.style.transformOrigin = "0 0";
+
+        // Alternativa: reassignar la meta viewport (Safari i Chrome)
+        const viewport = document.querySelector("meta[name=viewport]");
+        if (viewport) {
+            viewport.setAttribute("content", "width=device-width, initial-scale=1.0");
+        }
+    }, 100); // petit delay per deixar que el modal desaparegui
 
     if (pendingAction) {
       pendingAction();
