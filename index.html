@@ -37,7 +37,7 @@
     /* 🎯 COLOR NOMÉS PER ALS NÚMEROS DE PUNTUACIÓ */
     #score-equip1,
     #score-equip2 {
-      color: #ffd700;   /* posa aquí el color que vulguis */
+      color: #8ab4ff;   
     }
 
     button {
@@ -65,40 +65,45 @@
 
   <!-- =================== Equip 1 =================== -->
   <h2>Ordre del Fènix: <span id="score-equip1">0</span> punts</h2>
-  <button onclick="updateScore('equip1', 5)">+5</button>
-  <button onclick="updateScore('equip1', 10)">+10</button>
-  <button onclick="updateScore('equip1', 15)">+15</button>
-  <button onclick="updateScore('equip1', 20)">+20</button>
-  <button onclick="updateScore('equip1', 30)">+30</button>
-  <button onclick="updateScore('equip1', 50)">+50</button>
-  <button onclick="updateScore('equip1', 70)">+70</button>
-  <br>
-  <button onclick="updateScore('equip1', -5)">-5</button>
-  <button onclick="updateScore('equip1', -10)">-10</button>
-  <button onclick="updateScore('equip1', -15)">-15</button>
-  <button onclick="updateScore('equip1', -20)">-20</button>
-  <button onclick="updateScore('equip1', -30)">-30</button>
-  <button onclick="updateScore('equip1', -50)">-50</button>
-  <button onclick="updateScore('equip1', -70)">-70</button>
+  <div class="button-grid">
+    <button onclick="updateScore('equip1', 5)">+5</button>
+    <button onclick="updateScore('equip1', 10)">+10</button>
+    <button onclick="updateScore('equip1', 15)">+15</button>
+    <button onclick="updateScore('equip1', 20)">+20</button>
+    <button onclick="updateScore('equip1', 30)">+30</button>
+    <button onclick="updateScore('equip1', 50)">+50</button>
+    <button onclick="updateScore('equip1', 70)">+70</button>
+  
+    <button onclick="updateScore('equip1', -5)">-5</button>
+    <button onclick="updateScore('equip1', -10)">-10</button>
+    <button onclick="updateScore('equip1', -15)">-15</button>
+    <button onclick="updateScore('equip1', -20)">-20</button>
+    <button onclick="updateScore('equip1', -30)">-30</button>
+    <button onclick="updateScore('equip1', -50)">-50</button>
+    <button onclick="updateScore('equip1', -70)">-70</button>
+  </div>
+
+  
 
   <!-- =================== Equip 2 =================== -->
   <h2>Cavallers de la Mort: <span id="score-equip2">0</span> punts</h2>
-  <button onclick="updateScore('equip2', 5)">+5</button>
-  <button onclick="updateScore('equip2', 10)">+10</button>
-  <button onclick="updateScore('equip2', 15)">+15</button>
-  <button onclick="updateScore('equip2', 20)">+20</button>
-  <button onclick="updateScore('equip2', 30)">+30</button>
-  <button onclick="updateScore('equip2', 50)">+50</button>
-  <button onclick="updateScore('equip2', 70)">+70</button>
-  <br>
-  <button onclick="updateScore('equip2', -5)">-5</button>
-  <button onclick="updateScore('equip2', -10)">-10</button>
-  <button onclick="updateScore('equip2', -15)">-15</button>
-  <button onclick="updateScore('equip2', -20)">-20</button>
-  <button onclick="updateScore('equip2', -30)">-30</button>
-  <button onclick="updateScore('equip2', -50)">-50</button>
-  <button onclick="updateScore('equip2', -70)">-70</button>
+  <div class="button-grid">
+    <button onclick="updateScore('equip2', 5)">+5</button>
+    <button onclick="updateScore('equip2', 10)">+10</button>
+    <button onclick="updateScore('equip2', 15)">+15</button>
+    <button onclick="updateScore('equip2', 20)">+20</button>
+    <button onclick="updateScore('equip2', 30)">+30</button>
+    <button onclick="updateScore('equip2', 50)">+50</button>
+    <button onclick="updateScore('equip2', 70)">+70</button>
 
+    <button onclick="updateScore('equip2', -5)">-5</button>
+    <button onclick="updateScore('equip2', -10)">-10</button>
+    <button onclick="updateScore('equip2', -15)">-15</button>
+    <button onclick="updateScore('equip2', -20)">-20</button>
+    <button onclick="updateScore('equip2', -30)">-30</button>
+    <button onclick="updateScore('equip2', -50)">-50</button>
+    <button onclick="updateScore('equip2', -70)">-70</button>
+ </div>
 
 <!-- =============== MODAL CONTRASENYA (ANTI-ZOOM) =============== -->
 <div id="password-modal" style="
