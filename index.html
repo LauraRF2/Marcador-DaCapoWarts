@@ -37,7 +37,12 @@
     /* 🎯 COLOR NOMÉS PER ALS NÚMEROS DE PUNTUACIÓ */
     #score-equip1,
     #score-equip2 {
-      color: #d0b3ff;   
+      color: #ffe97f; 
+      text-shadow: 
+        0 0 10px #ffd700,
+        0 0 20px #ffec8b,
+        0 0 30px #ffdf70; /* 🔥 efecte resplendor */
+      font-weight: bold;
     }
 
     button {
@@ -46,16 +51,16 @@
       font-size: 36px;
       border: 2px solid #f5e6c8;
       border-radius: 12px;
-      background: linear-gradient(to top, #3a0c5a, #6a1fa5);
+      background: linear-gradient(to top, #5a3d7a, #8a64b8); 
       color: #f5e6c8;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 0 12px #6a1fa5;
+      box-shadow: 0 0 8px rgba(138, 100, 184, 0.6);
     }
 
     button:hover {
       transform: scale(1.1) rotate(-2deg);
-      box-shadow: 0 0 18px #ffd700;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.7);
     }
 
     .button-grid {
