@@ -96,7 +96,7 @@
   <button onclick="updateScore('equip2', -70)">-70</button>
 
 
-<!-- =============== MODAL CONTRASSENYA (ANTI-ZOOM) =============== -->
+<!-- =============== MODAL CONTRASENYA (ANTI-ZOOM) =============== -->
 <div id="password-modal" style="
   display:none;
   position:fixed;
@@ -111,7 +111,7 @@
   <div id="password-box" style="
     background:#2a1a5c;
     padding:1em;
-    width:95%;
+    width:98%;
     max-width:600px;
     border:0.125em solid #f5e6c8;
     border-radius:0.9375em;
@@ -121,16 +121,16 @@
     
     <h2 id="password-title" style="
       margin-bottom:10px;
-      font-size:2.5em;
+      font-size:2.0em;
       line-height:1.3;">
       Només l'equip docent autoritzat pot modificar el marcador!<br>
-      Introdueix la contrassenya
+      Introdueix la contrasenya
     </h2>
     
     <input id="password-input" type="password" style="
       padding:8px;
       width:100%;
-      font-size:2.5em;
+      font-size:1.5em;
       border-radius:8px;
       border:2px solid #f5e6c8;
       background:#fff;">
@@ -139,7 +139,7 @@
     
     <button onclick="submitPassword()" style="
       padding:8px 16px;
-      font-size:2.5em;
+      font-size:2.0em;
       border-radius:10px;
       border:2px solid #f5e6c8;
       background: linear-gradient(to top, #3a0c5a, #6a1fa5);
@@ -171,7 +171,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  /* ================= CONTRASSENYA ================= */
+  /* ================= CONTRASENYA ================= */
   let userSecret = null;
   let pendingAction = null;
 
@@ -192,7 +192,7 @@
     userSecret = pwd;
     document.getElementById("password-modal").style.display = "none";
     
-       // === Restablir zoom al tancar la finestra de contrassenya ===
+       // === Restablir zoom al tancar la finestra de contrasenya ===
     setTimeout(() => {
         // Scroll a la posició 0 per evitar que el mòbil quedi desplaçat
         window.scrollTo(0, 0);
@@ -231,7 +231,7 @@
         secret: userSecret
       });
     } catch (err) {
-      alert("⚠️ Contrassenya incorrecta.");
+      alert("⚠️ Contrasenya incorrecta.");
       userSecret = null;
       return ;
     }
